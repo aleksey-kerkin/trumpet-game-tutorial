@@ -177,15 +177,29 @@
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(-50%, 0, 0);
+    transform: translate3d(var(--marquee-shift, 0px), 0, 0);
   }
 }
 
+.marquee-viewport {
+  overflow-x: clip;
+  overflow-y: visible;
+  transform: translateZ(0);
+}
+
 .marquee-track {
+  display: inline-flex;
+  width: max-content;
   animation: brutal-marquee 28s linear infinite;
+  -webkit-animation: brutal-marquee 28s linear infinite;
+  animation-play-state: paused;
   will-change: transform;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+}
+
+.marquee-track--ready {
+  animation-play-state: running;
 }
 
 @keyframes brutal-pop {
