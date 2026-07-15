@@ -1,50 +1,59 @@
-# Трубач на коне
+# Trumpeter on Horseback
 
-Игровой веб-тренажёр для обучения игре на трубе (PWA).
+A neo-brutalist web PWA for learning trumpet — short daily quests from your first lip buzz to your first melody. Microphone feedback for sound, pitch, rhythm, and dynamics.
 
-## Стек
+**Live stack:** React 19 · TypeScript · Vite · Tailwind CSS 4 · Zustand · IndexedDB
 
-- React 19 + TypeScript + Vite
-- Tailwind CSS 4
-- Zustand + IndexedDB (прогресс)
-- vite-plugin-pwa
+## Features
 
-## Запуск
+- **30 quests** across 4 weeks — instrument basics, breathing, embouchure, rhythm, pitch, vocalise, daily routine
+- **RU / EN** UI with persisted locale
+- **Progress** — XP, levels, daily streak, quest map with unlock chain
+- **Web Audio** — microphone level, pitch detection ([pitchy](https://github.com/ianprime0509/pitchy)), metronome, reference tones ([Tone.js](https://tonejs.github.io/))
+- **Staff notation** in select quests ([VexFlow](https://www.vexflow.com/))
+- **Installable PWA** with offline shell via `vite-plugin-pwa`
+
+## Quick start
 
 ```bash
 npm install
 npm run dev
 ```
 
-Сборка:
+Production build:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Структура
+Lint:
+
+```bash
+npm run lint
+```
+
+## Project layout
 
 ```
 src/
-├── app/          # роутинг, layout, страницы
-├── game/         # XP, уровни, streak, persistence
-├── lessons/      # каталог квестов
-├── components/   # UI и мини-игры квестов
-├── content/      # тексты RU/EN
-└── audio/        # микрофон, pitch, метроном
+├── app/           # routing, layout, pages
+├── game/          # XP, levels, streak, IndexedDB persistence
+├── lessons/       # quest catalog and types
+├── components/    # neo-brutal UI + quest mini-games
+├── content/       # RU/EN strings, quests, catalog
+├── audio/         # mic, pitch, metronome, RMS
+├── assets/        # Noun Project icons (traced SVG)
+└── i18n/          # locale store and messages
+tools/pdf-pipeline/  # local OCR pipeline (not shipped with the app)
 ```
 
-## Документация (локально)
+## Credits
 
-Внутренние заметки и карта курса — в `.cursor/docs/` (не в git):
+UI icons and hero decor are from [The Noun Project](https://thenounproject.com/) (CC BY 3.0). See [CREDITS.md](CREDITS.md).
 
-- `.cursor/docs/quest-map-30.md` — карта 30 квестов
-- `.cursor/docs/rights-strategy.md` — стратегия прав
-- `.cursor/plans/` — планы разработки
+## Author
 
-## MVP
+© Aleksey Kerkin — [GitHub](https://github.com/aleksey-kerkin) · [Telegram](https://t.me/aleksey_kerkin)
 
-Реализованы все 30 квестов: от знакомства с трубой до первой мелодии.
-
-План разработки: `.cursor/plans/trumpet_learning_game_941c7163.plan.md`
+Educational project. Not affiliated with any trumpet method book publisher.
