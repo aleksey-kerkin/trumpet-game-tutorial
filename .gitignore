@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+dev-dist/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment (e.g. BOOKS_DIR for pdf-pipeline)
+.env
+.env.*
+!.env.example
+
+# Vite / local overrides
+*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Test / coverage
+coverage/
+
+# Cursor IDE
+.cursor/
+
+# Other editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Books & OCR/OMR output (local only — see project plan)
+*.pdf
+docs/extracted/
+
+# PDF pipeline temp artifacts
+tools/pdf-pipeline/output/
+tools/pdf-pipeline/.cache/
+tools/pdf-pipeline/.venv/
+tools/pdf-pipeline/**/*.png
