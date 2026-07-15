@@ -68,7 +68,3 @@ export class MetronomeEngine {
     osc.stop(time + CLICK_DURATION)
   }
 }
-
-export function isTapOnBeat(tapMs: number, beatStartMs: number, toleranceMs: number): boolean {
-  return Math.abs(tapMs - beatStartMs) <= toleranceMs
-}

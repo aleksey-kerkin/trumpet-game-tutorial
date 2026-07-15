@@ -31,15 +31,20 @@ src/
 ├── game/         # XP, уровни, streak, persistence
 ├── lessons/      # каталог квестов
 ├── components/   # UI и мини-игры квестов
-├── content/ru/   # тексты
-└── audio/        # звук (фаза 2+)
-docs/
-└── curriculum.md # карта курса
+├── content/      # тексты RU/EN
+└── audio/        # микрофон, pitch, метроном
 ```
+
+## Документация (локально)
+
+Внутренние заметки и карта курса — в `.cursor/docs/` (не в git):
+
+- `.cursor/docs/quest-map-30.md` — карта 30 квестов
+- `.cursor/docs/rights-strategy.md` — стратегия прав
+- `.cursor/plans/` — планы разработки
 
 ## MVP
 
-Реализованы первые 3 квеста: сборка трубы, дыхание 4-2-6, buzz с микрофоном.
+Реализованы все 30 квестов: от знакомства с трубой до первой мелодии.
 
-План разработки: `.cursor/plans/trumpet_learning_game_941c7163.plan.md`  
-Стратегия прав (публичный релиз): `docs/rights-strategy.md`
+План разработки: `.cursor/plans/trumpet_learning_game_941c7163.plan.md`

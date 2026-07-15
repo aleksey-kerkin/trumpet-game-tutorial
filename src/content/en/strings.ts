@@ -3,8 +3,6 @@ export const strings = {
   questMap: 'Quest map',
   questRangeLabel: 'Quests',
   backToMap: 'Back to map',
-  startQuest: 'Start quest',
-  completeQuest: 'Complete quest',
   questCompleted: 'Quest complete!',
   questInDevelopment: 'Quest in development.',
   returnToMap: 'Return to map',

@@ -5,8 +5,6 @@ export {
   NOTE_E4_HZ,
   NOTE_F4_HZ,
   NOTE_G4_HZ,
-  NOTE_A4_HZ,
-  NOTE_B4_HZ,
 } from './notes'
 
 export function centsOffTarget(frequency: number, targetHz: number): number {

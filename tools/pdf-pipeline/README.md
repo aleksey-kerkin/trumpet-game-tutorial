@@ -32,18 +32,18 @@ python run_ch1.py
 Or step by step:
 
 ```bash
-python render_pages.py          # PNG → docs/extracted/raw/ch1/
-python classify_pages.py --json ../../docs/extracted/ch1-classification.json
-python ocr_text.py              # → docs/extracted/ch1-outline.md
+python render_pages.py          # PNG → .cursor/docs/extracted/raw/ch1/
+python classify_pages.py --json ../../.cursor/docs/extracted/ch1-classification.json
+python ocr_text.py              # → .cursor/docs/extracted/ch1-outline.md
 ```
 
 ## Outputs (gitignored)
 
 | File | Description |
 |------|-------------|
-| `docs/extracted/raw/ch1/page-*.png` | 300 dpi renders |
-| `docs/extracted/ch1-classification.json` | text vs notation |
-| `docs/extracted/ch1-ocr.txt` | raw OCR text |
-| `docs/extracted/ch1-outline.md` | headings + OCR draft |
+| `.cursor/docs/extracted/raw/ch1/page-*.png` | 300 dpi renders |
+| `.cursor/docs/extracted/ch1-classification.json` | text vs notation |
+| `.cursor/docs/extracted/ch1-ocr.txt` | raw OCR text |
+| `.cursor/docs/extracted/ch1-outline.md` | headings + OCR draft |
 
-Curriculum map (30 quests): `docs/quest-map-30.md`
+Curriculum map (30 quests): `.cursor/docs/quest-map-30.md`

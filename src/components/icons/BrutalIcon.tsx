@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { HTMLAttributes } from 'react'
 import { cn } from '../ui/cn'
 import { iconSources } from './iconMap'
 import type { IconName, IconSize } from './types'
@@ -31,28 +31,5 @@ export function BrutalIcon({
       {...props}
       dangerouslySetInnerHTML={{ __html: svg }}
     />
-  )
-}
-
-interface BrutalIconLabelProps {
-  icon: IconName
-  size?: IconSize
-  iconClassName?: string
-  className?: string
-  children: ReactNode
-}
-
-export function BrutalIconLabel({
-  icon,
-  size = 'sm',
-  iconClassName,
-  className,
-  children,
-}: BrutalIconLabelProps) {
-  return (
-    <span className={cn('inline-flex items-center gap-2', className)}>
-      <BrutalIcon name={icon} size={size} className={iconClassName} />
-      <span>{children}</span>
-    </span>
   )
 }

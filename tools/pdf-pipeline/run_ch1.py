@@ -49,7 +49,7 @@ def main() -> int:
         )
         return 0
 
-    print("\nDone. See docs/extracted/ch1-outline.md")
+    print("\nDone. See .cursor/docs/extracted/ch1-outline.md")
     return 0
 
 

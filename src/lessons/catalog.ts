@@ -34,6 +34,3 @@ export function getQuestStatus(
   if (completedIds.has(quest.unlockAfter)) return 'available'
   return 'locked'
 }
-
-/** @deprecated Use getQuestCatalog(locale) */
-export const questCatalog = ruMessages.catalog

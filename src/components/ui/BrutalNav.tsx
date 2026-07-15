@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { BrutalLink } from './BrutalLink'
 
 interface BrutalNavProps {
   title: string
@@ -18,18 +17,5 @@ export function BrutalNav({ title, children }: BrutalNavProps) {
       </Link>
       <div className="flex items-center gap-2">{children}</div>
     </nav>
-  )
-}
-
-interface BrutalNavLinkProps {
-  to: string
-  children: ReactNode
-}
-
-export function BrutalNavLink({ to, children }: BrutalNavLinkProps) {
-  return (
-    <BrutalLink to={to} variant="secondary" size="sm">
-      {children}
-    </BrutalLink>
   )
 }

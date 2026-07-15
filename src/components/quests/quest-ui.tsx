@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react'
 import { BrutalIcon } from '../icons'
 import { useI18n } from '../../i18n'
-import { BrutalBadge, BrutalButton, BrutalProgress, cn } from '../ui'
+import { BrutalBadge, BrutalProgress } from '../ui'
 
 export const questHintClass = 'brutal-type-hint'
 
@@ -49,14 +48,3 @@ export function StepBadges({ labels, currentIndex }: StepBadgesProps) {
     </div>
   )
 }
-
-interface QuestActionsProps {
-  children: ReactNode
-  className?: string
-}
-
-export function QuestActions({ children, className }: QuestActionsProps) {
-  return <div className={cn('space-y-3', className)}>{children}</div>
-}
-
-export { BrutalButton }

@@ -11,7 +11,7 @@ BOOKS_DIR = Path(os.environ.get("BOOKS_DIR", DEFAULT_BOOKS_DIR))
 
 CH1_PDF = "T_Dokshitser_Sistema_komplexnykh_uprazhneniy_trubacha_ch_1_iz_4.pdf"
 
-EXTRACTED_DIR = PROJECT_ROOT / "docs/extracted"
+EXTRACTED_DIR = PROJECT_ROOT / ".cursor/docs/extracted"
 RAW_PAGES_DIR = EXTRACTED_DIR / "raw"
 CH1_RAW_DIR = RAW_PAGES_DIR / "ch1"
 

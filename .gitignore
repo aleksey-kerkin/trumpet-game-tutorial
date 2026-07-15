@@ -46,10 +46,6 @@ coverage/
 .DS_Store
 Thumbs.db
 
-# Books & OCR/OMR output (local only — see project plan)
-*.pdf
-docs/extracted/
-
 # PDF pipeline temp artifacts
 tools/pdf-pipeline/output/
 tools/pdf-pipeline/.cache/

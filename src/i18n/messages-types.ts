@@ -144,8 +144,6 @@ export interface ShellStrings {
   questMap: string
   questRangeLabel: string
   backToMap: string
-  startQuest: string
-  completeQuest: string
   questCompleted: string
   questInDevelopment: string
   returnToMap: string

@@ -3,8 +3,6 @@ export const strings = {
   questMap: 'Карта квестов',
   questRangeLabel: 'Квесты',
   backToMap: 'К карте',
-  startQuest: 'Начать квест',
-  completeQuest: 'Завершить квест',
   questCompleted: 'Квест пройден!',
   questInDevelopment: 'Квест в разработке.',
   returnToMap: 'Вернуться на карту',

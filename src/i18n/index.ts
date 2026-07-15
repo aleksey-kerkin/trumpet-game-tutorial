@@ -1,5 +1,1 @@
-export type { AboutContent, CourseWeek, FaqItem, Locale } from './types'
-export type { Messages } from './messages'
-export { getMessages } from './messages'
-export { useLocaleStore } from './store'
 export { useI18n } from './useI18n'
