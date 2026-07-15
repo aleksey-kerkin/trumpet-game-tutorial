@@ -1,4 +1,6 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef } from 'react'
+
+const MARQUEE_DURATION_MS = 28_000
 
 interface BrutalMarqueeProps {
   items: string[]
@@ -8,28 +10,46 @@ export function BrutalMarquee({ items }: BrutalMarqueeProps) {
   const segment = `${items.join(' • ')} • `
   const trackRef = useRef<HTMLDivElement>(null)
   const segmentRef = useRef<HTMLSpanElement>(null)
-  const [ready, setReady] = useState(false)
 
   useLayoutEffect(() => {
     const track = trackRef.current
     const segmentEl = segmentRef.current
     if (!track || !segmentEl) return
 
-    setReady(false)
+    let cancelled = false
 
-    const updateShift = () => {
-      const width = segmentEl.offsetWidth
+    const startAnimation = async () => {
+      if ('fonts' in document) {
+        await document.fonts.ready
+      }
+      if (cancelled) return
+
+      const width = segmentEl.getBoundingClientRect().width
       if (width <= 0) return
-      track.style.setProperty('--marquee-shift', `-${width}px`)
-      setReady(true)
+
+      track.getAnimations().forEach((animation) => animation.cancel())
+
+      track.animate(
+        [
+          { transform: 'translate3d(0, 0, 0)' },
+          { transform: `translate3d(-${width}px, 0, 0)` },
+        ],
+        { duration: MARQUEE_DURATION_MS, iterations: Infinity, easing: 'linear' },
+      )
     }
 
-    updateShift()
+    void startAnimation()
 
-    const observer = new ResizeObserver(updateShift)
+    const observer = new ResizeObserver(() => {
+      void startAnimation()
+    })
     observer.observe(segmentEl)
 
-    return () => observer.disconnect()
+    return () => {
+      cancelled = true
+      observer.disconnect()
+      track.getAnimations().forEach((animation) => animation.cancel())
+    }
   }, [segment])
 
   return (
@@ -39,7 +59,7 @@ export function BrutalMarquee({ items }: BrutalMarqueeProps) {
     >
       <div
         ref={trackRef}
-        className={`marquee-track whitespace-nowrap text-body font-bold uppercase tracking-brutal-wide text-main-foreground${ready ? ' marquee-track--ready' : ''}`}
+        className="marquee-track whitespace-nowrap text-body font-bold uppercase tracking-brutal-wide text-main-foreground"
       >
         <span ref={segmentRef} className="shrink-0">
           {segment}
