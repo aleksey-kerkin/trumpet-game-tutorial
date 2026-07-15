@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'Трубач на коне',
-        short_name: 'Трубач',
+        name: 'Trumpeter on Horseback',
+        short_name: 'Trumpeter',
         description: 'Игровой тренажёр для обучения игре на трубе',
         theme_color: '#0d1117',
         background_color: '#0d1117',

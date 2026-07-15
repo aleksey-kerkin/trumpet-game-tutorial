@@ -35,7 +35,10 @@ export function AppLayout() {
       <main>
         <Outlet />
       </main>
-      <BrutalFooter aboutLabel={t.strings.footerAbout} copyright={t.strings.footerCopyright} />
+      <BrutalFooter
+        aboutLabel={t.strings.footerAbout}
+        copyright={t.strings.footerCopyright(new Date().getFullYear())}
+      />
     </div>
   )
 }

@@ -22,4 +22,4 @@ Source PNG previews were retrieved from Noun Project CDN and traced to SVG for i
 | `decor-sparkle.svg` | sparkle | Side Project | https://thenounproject.com/icon/sparkle-7746034/ |
 | `decor-asterisk.svg` | asterisk | Side Project | https://thenounproject.com/icon/asterisk-7745956/ |
 
-Decor icons are from the Neubrutalism set and used only as low-opacity background shapes on the home hero card.
+Decor icons are from the Neubrutalism set and used as low-opacity hero backdrop shapes, mascot sparkle, and the PWA favicon (`public/favicon.svg`, derived from `decor-waves.svg`).

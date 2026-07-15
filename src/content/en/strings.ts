@@ -32,7 +32,8 @@ export const strings = {
     'ugly practice — clean tone',
   ],
   footerAbout: 'About',
-  footerCopyright: '© Trumpeter on Horseback — educational project',
+  footerCopyright: (year: number) =>
+    `© ${year} Aleksey Kerkin. Trumpeter on Horseback — educational project.`,
   weekProgress: (done: number, total: number) => `${done} of ${total} quests`,
   loading: 'Loading…',
   langSwitchLabel: 'Language',

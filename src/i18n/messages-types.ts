@@ -159,7 +159,7 @@ export interface ShellStrings {
   heroCtaAbout: string
   marqueeItems: readonly string[]
   footerAbout: string
-  footerCopyright: string
+  footerCopyright: (year: number) => string
   weekProgress: (done: number, total: number) => string
   loading: string
   langSwitchLabel: string

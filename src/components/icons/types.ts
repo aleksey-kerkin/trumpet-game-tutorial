@@ -6,6 +6,8 @@ export type IconName =
   | 'trumpet'
   | 'lips'
   | 'mouthpiece'
+  | 'github'
+  | 'telegram'
 
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 

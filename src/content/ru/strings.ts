@@ -32,7 +32,8 @@ export const strings = {
     'грязная практика — чистый звук',
   ],
   footerAbout: 'О проекте',
-  footerCopyright: '© Трубач на коне — учебный проект',
+  footerCopyright: (year: number) =>
+    `© ${year} Aleksey Kerkin. Трубач на коне.`,
   weekProgress: (done: number, total: number) => `${done} из ${total} квестов`,
   loading: 'Загрузка…',
   langSwitchLabel: 'Язык',

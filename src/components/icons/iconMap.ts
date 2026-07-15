@@ -5,6 +5,8 @@ import lockSvg from '../../assets/icons/noun/lock.svg?raw'
 import trumpetSvg from '../../assets/icons/noun/trumpet.svg?raw'
 import lipsSvg from '../../assets/icons/noun/lips.svg?raw'
 import mouthpieceSvg from '../../assets/icons/noun/mouthpiece.svg?raw'
+import githubSvg from '../../assets/icons/social/github.svg?raw'
+import telegramSvg from '../../assets/icons/social/telegram.svg?raw'
 import type { IconName } from './types'
 
 export const iconSources: Record<IconName, string> = {
@@ -15,4 +17,6 @@ export const iconSources: Record<IconName, string> = {
   trumpet: trumpetSvg,
   lips: lipsSvg,
   mouthpiece: mouthpieceSvg,
+  github: githubSvg,
+  telegram: telegramSvg,
 }
