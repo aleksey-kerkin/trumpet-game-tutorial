@@ -174,11 +174,18 @@
 
 @keyframes brutal-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
+}
+
+.marquee-track {
+  animation: brutal-marquee 28s linear infinite;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 @keyframes brutal-pop {
@@ -268,9 +275,5 @@ a:not([class*='text-']) {
   .brutal-hover-lift:hover:not(:disabled),
   .brutal-pressable:active:not(:disabled) {
     transform: none;
-  }
-
-  .marquee-track {
-    animation: none !important;
   }
 }

@@ -6,6 +6,10 @@ dist/
 dist-ssr/
 dev-dist/
 
+# Cloudflare Wrangler local state
+.wrangler/
+.dev.vars*
+
 # Logs
 logs/
 *.log
