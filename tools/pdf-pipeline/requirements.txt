@@ -1,3 +1,0 @@
-# PDF pipeline (local OCR/OMR tools — not part of PWA)
-pytesseract>=0.3.13
-Pillow>=11.0.0

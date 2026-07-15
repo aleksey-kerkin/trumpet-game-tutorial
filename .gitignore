@@ -15,7 +15,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Environment (e.g. BOOKS_DIR for pdf-pipeline)
+# Environment (e.g. BOOKS_DIR for local pdf-pipeline)
 .env
 .env.*
 !.env.example
@@ -46,8 +46,9 @@ coverage/
 .DS_Store
 Thumbs.db
 
-# PDF pipeline temp artifacts
-tools/pdf-pipeline/output/
-tools/pdf-pipeline/.cache/
-tools/pdf-pipeline/.venv/
-tools/pdf-pipeline/**/*.png
+# Books & OCR output (local only — under .cursor/)
+*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
