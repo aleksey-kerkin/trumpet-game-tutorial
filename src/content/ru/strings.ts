@@ -33,7 +33,7 @@ export const strings = {
   ],
   footerAbout: 'О проекте',
   footerCopyright: (year: number) =>
-    `© ${year} Aleksey Kerkin. Трубач на коне.`,
+    `© ${year} Aleksey Kerkin. Трубач на коне. Не является официальным изданием методики Докшицера.`,
   weekProgress: (done: number, total: number) => `${done} из ${total} квестов`,
   loading: 'Загрузка…',
   langSwitchLabel: 'Язык',

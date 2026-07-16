@@ -16,7 +16,6 @@ export function AboutPage() {
           </BrutalCard>
         ))}
       </div>
-      <p className="text-center text-meta text-foreground-muted">{t.about.footer}</p>
     </div>
   )
 }

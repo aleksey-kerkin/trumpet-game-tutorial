@@ -25,5 +25,4 @@ export const about: AboutContent = {
       a: 'Иконки: EsyaAm, Meko, Roat Studio, H Alberto Gongora, Gung Yoga и lastspark через The Noun Project (CC BY 3.0). Список и ссылки — в CREDITS.md в репозитории.',
     },
   ],
-  footer: '© Учебный проект. Не является официальным изданием методики Докшицера.',
 }

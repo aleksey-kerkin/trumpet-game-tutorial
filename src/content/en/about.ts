@@ -25,5 +25,4 @@ export const about: AboutContent = {
       a: 'Icons by EsyaAm, Meko, Roat Studio, H Alberto Gongora, Gung Yoga, and lastspark via The Noun Project (CC BY 3.0). See CREDITS.md in the repository for links.',
     },
   ],
-  footer: '© Educational project. Not an official edition of Dokshitser’s method.',
 }

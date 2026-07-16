@@ -17,5 +17,4 @@ export interface AboutContent {
   backLink: string
   title: string
   faq: FaqItem[]
-  footer: string
 }

@@ -33,7 +33,7 @@ export const strings = {
   ],
   footerAbout: 'About',
   footerCopyright: (year: number) =>
-    `© ${year} Aleksey Kerkin. Trumpeter on Horseback — educational project.`,
+    `© ${year} Aleksey Kerkin. Trumpeter on Horseback. Not an official edition of Dokshitser's method.`,
   weekProgress: (done: number, total: number) => `${done} of ${total} quests`,
   loading: 'Loading…',
   langSwitchLabel: 'Language',
