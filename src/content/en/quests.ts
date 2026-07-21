@@ -9,6 +9,8 @@ export const quests = {
     backToMap: 'Back to map',
     backToQuestMap: 'Back to quest map',
     holdProgress: 'Hold',
+    holdProgressAriaLabel: (percent: number) => `Hold: ${percent}%`,
+    soundLevelAriaLabel: (percent: number) => `Sound level: ${percent}%`,
   },
   breathing: {
     hint: (cyclesRequired: number) =>
@@ -87,12 +89,14 @@ export const quests = {
       quiet: 'Quiet',
       loud: 'Loud',
     },
+    meterAriaLabel: 'Volume level',
     completeButton: 'Dynamics mastered!',
   },
   crescendo: {
     hint: (steps: number) =>
       `Gradually increase volume: ${steps} steps from quiet to loud.`,
     stepLabel: (current: number) => `Step ${current}`,
+    meterAriaLabel: 'Crescendo volume level',
     completeButton: 'Crescendo complete!',
   },
   lipWarmup: {

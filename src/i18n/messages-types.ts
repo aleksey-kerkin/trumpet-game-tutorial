@@ -12,6 +12,8 @@ export interface QuestUiMessages {
     backToMap: string
     backToQuestMap: string
     holdProgress: string
+    holdProgressAriaLabel: (percent: number) => string
+    soundLevelAriaLabel: (percent: number) => string
   }
   breathing: {
     hint: (cyclesRequired: number) => string
@@ -71,11 +73,13 @@ export interface QuestUiMessages {
       error: string
     }
     meter: { quiet: string; loud: string }
+    meterAriaLabel: string
     completeButton: string
   }
   crescendo: {
     hint: (steps: number) => string
     stepLabel: (current: number) => string
+    meterAriaLabel: string
     completeButton: string
   }
   lipWarmup: {
@@ -171,6 +175,8 @@ export interface ShellStrings {
   footerAbout: string
   footerCopyright: (year: number) => string
   weekProgress: (done: number, total: number) => string
+  xpProgressAriaLabel: (current: number, max: number) => string
+  weekProgressAriaLabel: (title: string, done: number, total: number) => string
   loading: string
   langSwitchLabel: string
   langRu: string

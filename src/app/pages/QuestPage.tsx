@@ -1,110 +1,238 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { MascotBubble } from '../../components/MascotBubble'
-import { BreathingQuest } from '../../components/quests/BreathingQuest'
-import { BuzzQuest } from '../../components/quests/BuzzQuest'
-import { ChecklistQuest } from '../../components/quests/ChecklistQuest'
-import { ComplexFlowQuest } from '../../components/quests/ComplexFlowQuest'
-import { ConfigurablePitchHoldQuest } from '../../components/quests/ConfigurablePitchHoldQuest'
-import { ConfigurablePitchSequenceQuest } from '../../components/quests/ConfigurablePitchSequenceQuest'
-import { CrescendoQuest } from '../../components/quests/CrescendoQuest'
-import { DailyMiniQuest } from '../../components/quests/DailyMiniQuest'
-import { DynamicsQuest } from '../../components/quests/DynamicsQuest'
-import { HoldNoteQuest } from '../../components/quests/HoldNoteQuest'
-import { LipWarmupQuest } from '../../components/quests/LipWarmupQuest'
-import { MetronomeQuest } from '../../components/quests/MetronomeQuest'
-import { MouthpieceQuest } from '../../components/quests/MouthpieceQuest'
-import { NoteEchoQuest } from '../../components/quests/NoteEchoQuest'
-import { ReviewWeakQuest } from '../../components/quests/ReviewWeakQuest'
-import { SlowFastQuest } from '../../components/quests/SlowFastQuest'
-import { StaffIntroQuest } from '../../components/quests/StaffIntroQuest'
-import { StreakGateQuest } from '../../components/quests/StreakGateQuest'
-import { TwoNotesQuest } from '../../components/quests/TwoNotesQuest'
 import { useI18n } from '../../i18n'
 import { useGameStore } from '../../game/store'
 import { getQuestById, getQuestStatus } from '../../lessons/catalog'
 import type { QuestDefinition } from '../../lessons/types'
 import { BrutalCard, BrutalLink } from '../../components/ui'
 
-function renderQuestBody(quest: QuestDefinition, onComplete: () => void, t: ReturnType<typeof useI18n>['t']) {
+const BreathingQuest = lazy(() =>
+  import('../../components/quests/BreathingQuest').then((m) => ({ default: m.BreathingQuest })),
+)
+const BuzzQuest = lazy(() =>
+  import('../../components/quests/BuzzQuest').then((m) => ({ default: m.BuzzQuest })),
+)
+const ChecklistQuest = lazy(() =>
+  import('../../components/quests/ChecklistQuest').then((m) => ({ default: m.ChecklistQuest })),
+)
+const ComplexFlowQuest = lazy(() =>
+  import('../../components/quests/ComplexFlowQuest').then((m) => ({ default: m.ComplexFlowQuest })),
+)
+const ConfigurablePitchHoldQuest = lazy(() =>
+  import('../../components/quests/ConfigurablePitchHoldQuest').then((m) => ({
+    default: m.ConfigurablePitchHoldQuest,
+  })),
+)
+const ConfigurablePitchSequenceQuest = lazy(() =>
+  import('../../components/quests/ConfigurablePitchSequenceQuest').then((m) => ({
+    default: m.ConfigurablePitchSequenceQuest,
+  })),
+)
+const CrescendoQuest = lazy(() =>
+  import('../../components/quests/CrescendoQuest').then((m) => ({ default: m.CrescendoQuest })),
+)
+const DailyMiniQuest = lazy(() =>
+  import('../../components/quests/DailyMiniQuest').then((m) => ({ default: m.DailyMiniQuest })),
+)
+const DynamicsQuest = lazy(() =>
+  import('../../components/quests/DynamicsQuest').then((m) => ({ default: m.DynamicsQuest })),
+)
+const HoldNoteQuest = lazy(() =>
+  import('../../components/quests/HoldNoteQuest').then((m) => ({ default: m.HoldNoteQuest })),
+)
+const LipWarmupQuest = lazy(() =>
+  import('../../components/quests/LipWarmupQuest').then((m) => ({ default: m.LipWarmupQuest })),
+)
+const MetronomeQuest = lazy(() =>
+  import('../../components/quests/MetronomeQuest').then((m) => ({ default: m.MetronomeQuest })),
+)
+const MouthpieceQuest = lazy(() =>
+  import('../../components/quests/MouthpieceQuest').then((m) => ({ default: m.MouthpieceQuest })),
+)
+const NoteEchoQuest = lazy(() =>
+  import('../../components/quests/NoteEchoQuest').then((m) => ({ default: m.NoteEchoQuest })),
+)
+const ReviewWeakQuest = lazy(() =>
+  import('../../components/quests/ReviewWeakQuest').then((m) => ({ default: m.ReviewWeakQuest })),
+)
+const SlowFastQuest = lazy(() =>
+  import('../../components/quests/SlowFastQuest').then((m) => ({ default: m.SlowFastQuest })),
+)
+const StaffIntroQuest = lazy(() =>
+  import('../../components/quests/StaffIntroQuest').then((m) => ({ default: m.StaffIntroQuest })),
+)
+const StreakGateQuest = lazy(() =>
+  import('../../components/quests/StreakGateQuest').then((m) => ({ default: m.StreakGateQuest })),
+)
+const TwoNotesQuest = lazy(() =>
+  import('../../components/quests/TwoNotesQuest').then((m) => ({ default: m.TwoNotesQuest })),
+)
+
+function QuestLoadingFallback() {
+  const { t } = useI18n()
+  return (
+    <p className="brutal-type-hint text-center text-foreground-muted">{t.strings.loading}</p>
+  )
+}
+
+function renderQuestBody(
+  quest: QuestDefinition,
+  onComplete: () => void,
+  t: ReturnType<typeof useI18n>['t'],
+) {
+  const fallback = <QuestLoadingFallback />
+
   switch (quest.type) {
     case 'breathing':
-      return <BreathingQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <BreathingQuest onComplete={onComplete} />
+        </Suspense>
+      )
     case 'buzz':
-      return <BuzzQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <BuzzQuest onComplete={onComplete} />
+        </Suspense>
+      )
     case 'lip-warmup':
-      return <LipWarmupQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <LipWarmupQuest onComplete={onComplete} />
+        </Suspense>
+      )
     case 'mouthpiece':
-      return <MouthpieceQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <MouthpieceQuest onComplete={onComplete} />
+        </Suspense>
+      )
     case 'dynamics':
-      return <DynamicsQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <DynamicsQuest onComplete={onComplete} />
+        </Suspense>
+      )
     case 'metronome': {
       const metronomeConfig =
         quest.config?.kind === 'metronome' ? quest.config.data : undefined
       return (
-        <MetronomeQuest
-          onComplete={onComplete}
-          bpm={metronomeConfig?.bpm}
-          totalBeats={metronomeConfig?.totalBeats}
-          requiredHits={metronomeConfig?.requiredHits}
-        />
+        <Suspense fallback={fallback}>
+          <MetronomeQuest
+            onComplete={onComplete}
+            bpm={metronomeConfig?.bpm}
+            totalBeats={metronomeConfig?.totalBeats}
+            requiredHits={metronomeConfig?.requiredHits}
+          />
+        </Suspense>
       )
     }
     case 'hold-note':
-      return <HoldNoteQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <HoldNoteQuest onComplete={onComplete} />
+        </Suspense>
+      )
     case 'two-notes':
-      return <TwoNotesQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <TwoNotesQuest onComplete={onComplete} />
+        </Suspense>
+      )
     case 'daily-mini':
-      return <DailyMiniQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <DailyMiniQuest onComplete={onComplete} />
+        </Suspense>
+      )
     case 'pitch-hold':
       if (quest.config?.kind === 'pitch-hold') {
-        return <ConfigurablePitchHoldQuest config={quest.config.data} onComplete={onComplete} />
+        return (
+          <Suspense fallback={fallback}>
+            <ConfigurablePitchHoldQuest config={quest.config.data} onComplete={onComplete} />
+          </Suspense>
+        )
       }
       break
     case 'pitch-sequence':
       if (quest.config?.kind === 'pitch-sequence') {
         return (
-          <ConfigurablePitchSequenceQuest config={quest.config.data} onComplete={onComplete} />
+          <Suspense fallback={fallback}>
+            <ConfigurablePitchSequenceQuest config={quest.config.data} onComplete={onComplete} />
+          </Suspense>
         )
       }
       break
     case 'checklist':
       if (quest.config?.kind === 'checklist') {
-        return <ChecklistQuest config={quest.config.data} onComplete={onComplete} />
+        return (
+          <Suspense fallback={fallback}>
+            <ChecklistQuest config={quest.config.data} onComplete={onComplete} />
+          </Suspense>
+        )
       }
       break
     case 'slow-fast':
       if (quest.config?.kind === 'slow-fast') {
-        return <SlowFastQuest config={quest.config.data} onComplete={onComplete} />
+        return (
+          <Suspense fallback={fallback}>
+            <SlowFastQuest config={quest.config.data} onComplete={onComplete} />
+          </Suspense>
+        )
       }
       break
     case 'note-echo':
       if (quest.config?.kind === 'note-echo') {
-        return <NoteEchoQuest config={quest.config.data} onComplete={onComplete} />
+        return (
+          <Suspense fallback={fallback}>
+            <NoteEchoQuest config={quest.config.data} onComplete={onComplete} />
+          </Suspense>
+        )
       }
       break
     case 'staff-intro':
       if (quest.config?.kind === 'staff-intro') {
-        return <StaffIntroQuest config={quest.config.data} onComplete={onComplete} />
+        return (
+          <Suspense fallback={fallback}>
+            <StaffIntroQuest config={quest.config.data} onComplete={onComplete} />
+          </Suspense>
+        )
       }
       break
     case 'complex-flow':
       if (quest.config?.kind === 'complex-flow') {
-        return <ComplexFlowQuest config={quest.config.data} onComplete={onComplete} />
+        return (
+          <Suspense fallback={fallback}>
+            <ComplexFlowQuest config={quest.config.data} onComplete={onComplete} />
+          </Suspense>
+        )
       }
       break
     case 'streak-gate':
       if (quest.config?.kind === 'streak-gate') {
-        return <StreakGateQuest config={quest.config.data} onComplete={onComplete} />
+        return (
+          <Suspense fallback={fallback}>
+            <StreakGateQuest config={quest.config.data} onComplete={onComplete} />
+          </Suspense>
+        )
       }
       break
     case 'crescendo':
       if (quest.config?.kind === 'crescendo') {
-        return <CrescendoQuest steps={quest.config.data.steps} onComplete={onComplete} />
+        return (
+          <Suspense fallback={fallback}>
+            <CrescendoQuest steps={quest.config.data.steps} onComplete={onComplete} />
+          </Suspense>
+        )
       }
       break
     case 'review-weak':
-      return <ReviewWeakQuest onComplete={onComplete} />
+      return (
+        <Suspense fallback={fallback}>
+          <ReviewWeakQuest onComplete={onComplete} />
+        </Suspense>
+      )
     default:
       break
   }
@@ -140,7 +268,9 @@ export function QuestPage() {
 
   return (
     <div className="space-y-6">
-      <BrutalLink to="/" leadingIcon="arrow-left">{t.strings.backToMap}</BrutalLink>
+      <BrutalLink to="/" leadingIcon="arrow-left">
+        {t.strings.backToMap}
+      </BrutalLink>
 
       <div>
         <h2 className="font-display text-title font-bold text-foreground">{quest.title}</h2>

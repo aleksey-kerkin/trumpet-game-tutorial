@@ -53,7 +53,12 @@ export function SoundHoldQuest({
         <p className="mt-3 text-body font-medium leading-relaxed">{message}</p>
         {status === 'listening' && (
           <div className="mx-auto mt-4 max-w-xs">
-            <BrutalProgress value={level * 100} max={100} variant="brass" />
+            <BrutalProgress
+              value={level * 100}
+              max={100}
+              variant="brass"
+              ariaLabel={shared.soundLevelAriaLabel(Math.round(level * 100))}
+            />
           </div>
         )}
       </BrutalPanel>

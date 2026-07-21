@@ -1,3 +1,4 @@
+import { useI18n } from '../../i18n'
 import { BrutalCard } from './BrutalCard'
 import { BrutalProgress } from './BrutalProgress'
 
@@ -16,6 +17,8 @@ export function BrutalWeekSummary({
   completed,
   total,
 }: BrutalWeekSummaryProps) {
+  const { t } = useI18n()
+
   return (
     <BrutalCard variant="blue" className="!py-3">
       <div className="flex items-start justify-between gap-3">
@@ -30,7 +33,12 @@ export function BrutalWeekSummary({
         </div>
       </div>
       <div className="mt-3">
-        <BrutalProgress value={completed} max={total} variant="brass" />
+        <BrutalProgress
+          value={completed}
+          max={total}
+          variant="brass"
+          ariaLabel={t.strings.weekProgressAriaLabel(title, completed, total)}
+        />
       </div>
     </BrutalCard>
   )

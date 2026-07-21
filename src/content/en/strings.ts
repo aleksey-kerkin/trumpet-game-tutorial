@@ -35,6 +35,9 @@ export const strings = {
   footerCopyright: (year: number) =>
     `© ${year} Aleksey Kerkin. Trumpeter on Horseback. Not an official edition of Dokshitser's method.`,
   weekProgress: (done: number, total: number) => `${done} of ${total} quests`,
+  xpProgressAriaLabel: (current: number, max: number) => `XP progress: ${current} of ${max}`,
+  weekProgressAriaLabel: (title: string, done: number, total: number) =>
+    `${title}: ${done} of ${total} quests`,
   loading: 'Loading…',
   langSwitchLabel: 'Language',
   langRu: 'RU',

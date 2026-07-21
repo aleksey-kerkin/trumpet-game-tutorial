@@ -9,6 +9,8 @@ export const quests = {
     backToMap: 'На карту',
     backToQuestMap: 'На карту квестов',
     holdProgress: 'Удержание',
+    holdProgressAriaLabel: (percent: number) => `Удержание: ${percent}%`,
+    soundLevelAriaLabel: (percent: number) => `Уровень звука: ${percent}%`,
   },
   breathing: {
     hint: (cyclesRequired: number) =>
@@ -87,12 +89,14 @@ export const quests = {
       quiet: 'Тихо',
       loud: 'Громко',
     },
+    meterAriaLabel: 'Уровень громкости',
     completeButton: 'Динамика освоена!',
   },
   crescendo: {
     hint: (steps: number) =>
       `Постепенно увеличивай громкость: ${steps} ступеней от тихого к громкому.`,
     stepLabel: (current: number) => `Ступень ${current}`,
+    meterAriaLabel: 'Уровень громкости crescendo',
     completeButton: 'Crescendo готов!',
   },
   lipWarmup: {

@@ -14,10 +14,12 @@ export function HoldProgress({ progress, label }: HoldProgressProps) {
   const displayLabel = label ?? t.quests.shared.holdProgress
 
   return (
-    <div>
-      <div className="mb-1 brutal-type-label text-foreground-muted">{displayLabel}</div>
-      <BrutalProgress value={progress * 100} max={100} variant="success" />
-    </div>
+    <BrutalProgress
+      value={progress * 100}
+      max={100}
+      variant="success"
+      label={displayLabel}
+    />
   )
 }
 

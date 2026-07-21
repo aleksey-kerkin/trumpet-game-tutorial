@@ -32,7 +32,12 @@ export function PlayerStats() {
               {current}/{max}
             </span>
           </div>
-          <BrutalProgress value={current} max={max} variant="brass" />
+          <BrutalProgress
+            value={current}
+            max={max}
+            variant="brass"
+            ariaLabel={t.strings.xpProgressAriaLabel(current, max)}
+          />
         </div>
         <div className="min-w-20 text-right">
           <div className="brutal-type-label text-jazz-blue">{t.strings.streak}</div>

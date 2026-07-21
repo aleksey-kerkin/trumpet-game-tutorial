@@ -11,7 +11,7 @@ const AUTHOR_GITHUB_URL = 'https://github.com/aleksey-kerkin'
 const AUTHOR_TELEGRAM_URL = 'https://t.me/aleksey_kerkin'
 
 const socialLinkClass =
-  'inline-flex text-main transition-colors hover:text-jazz-blue focus-visible:brutal-focus'
+  'inline-flex min-h-11 min-w-11 items-center justify-center text-main transition-colors hover:text-jazz-blue focus-visible:brutal-focus'
 
 export function BrutalFooter({ aboutLabel, copyright }: BrutalFooterProps) {
   return (

@@ -35,6 +35,9 @@ export const strings = {
   footerCopyright: (year: number) =>
     `© ${year} Aleksey Kerkin. Трубач на коне. Не является официальным изданием методики Докшицера.`,
   weekProgress: (done: number, total: number) => `${done} из ${total} квестов`,
+  xpProgressAriaLabel: (current: number, max: number) => `Прогресс XP: ${current} из ${max}`,
+  weekProgressAriaLabel: (title: string, done: number, total: number) =>
+    `${title}: ${done} из ${total} квестов`,
   loading: 'Загрузка…',
   langSwitchLabel: 'Язык',
   langRu: 'RU',

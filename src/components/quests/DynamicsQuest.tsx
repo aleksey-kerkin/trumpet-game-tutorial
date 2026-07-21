@@ -130,7 +130,12 @@ export function DynamicsQuest({ onComplete }: DynamicsQuestProps) {
           <span>{q.meter.quiet}</span>
           <span>{q.meter.loud}</span>
         </div>
-        <BrutalProgress value={meterPercent} variant="wine" size="md" />
+        <BrutalProgress
+          value={meterPercent}
+          variant="wine"
+          size="md"
+          ariaLabel={q.meterAriaLabel}
+        />
         <div className="mt-4 flex justify-center gap-2">
           <BrutalBadge variant={phase === 'loud' || phase === 'done' ? 'completed' : phase === 'quiet' ? 'brass' : 'locked'} className="gap-1">
             {(phase === 'loud' || phase === 'done') && <BrutalIcon name="check" size="xs" />}

@@ -80,7 +80,12 @@ export function CrescendoQuest({ steps, onComplete }: CrescendoQuestProps) {
       </div>
 
       <BrutalPanel className="p-6">
-        <BrutalProgress value={meterPercent} variant="brass" size="md" />
+        <BrutalProgress
+          value={meterPercent}
+          variant="brass"
+          size="md"
+          ariaLabel={q.meterAriaLabel}
+        />
         <p className="mt-3 text-center brutal-type-label text-jazz-ink/70">
           {q.stepLabel(Math.min(stepIndex + 1, steps))}
         </p>
