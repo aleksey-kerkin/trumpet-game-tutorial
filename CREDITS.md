@@ -23,3 +23,7 @@ Source PNG previews were retrieved from Noun Project CDN and traced to SVG for i
 | `decor-asterisk.svg` | asterisk | Side Project | https://thenounproject.com/icon/asterisk-7745956/ |
 
 Decor icons are from the Neubrutalism set and used as low-opacity hero backdrop shapes, mascot sparkle, and the PWA favicon (`public/favicon.svg`, derived from `decor-waves.svg`).
+
+## Music notation
+
+Staff rendering uses [VexFlow](https://vexflow.com/) (MIT). Note drills and melodies in quests are **original** — composed for this app, not transcribed from copyrighted trumpet methods. Individual pitches (e.g. C4, E4) and standard treble-clef notation are not subject to copyright.

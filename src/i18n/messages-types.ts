@@ -117,6 +117,15 @@ export interface QuestUiMessages {
     listenAgainButton: string
     completeButton: string
   }
+  staffIntro: {
+    learnHint: string
+    learnBody: string
+    toQuizButton: string
+    quizHint: string
+    quizWrong: string
+    quizCorrect: string
+    completeButton: string
+  }
   complexFlow: {
     warmupStepTitle: string
     sequenceStepTitle: string

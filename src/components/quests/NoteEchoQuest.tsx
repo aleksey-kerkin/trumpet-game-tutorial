@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as Tone from 'tone'
 import { isInTune } from '../../audio/pitch'
 import { usePitchDetector } from '../../audio/usePitchDetector'
 import type { NoteEchoConfig } from '../../lessons/quest-config'
+import { formatNoteLabel, getNoteHz } from '../../music/notes'
 import { useI18n } from '../../i18n'
+import { NoteStaff } from '../notes/NoteStaff'
 import { PitchTuner } from '../PitchTuner'
 import { BrutalButton } from '../ui'
 import { HoldProgress, questHintClass, StepBadges } from './quest-ui'
@@ -14,11 +16,11 @@ interface NoteEchoQuestProps {
 }
 
 export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
-  const { t } = useI18n()
+  const { locale, t } = useI18n()
   const q = t.quests.noteEcho
   const shared = t.quests.shared
 
-  const { steps, toleranceCents, holdMs } = config
+  const { steps, toleranceCents, holdMs, showStaff } = config
   const [stepIndex, setStepIndex] = useState(0)
   const [phase, setPhase] = useState<'listen' | 'play' | 'done'>('listen')
   const [holdProgress, setHoldProgress] = useState(0)
@@ -26,7 +28,23 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
   const holdStartRef = useRef<number | null>(null)
   const synthRef = useRef<Tone.Synth | null>(null)
 
-  const step = steps[stepIndex]
+  const resolvedSteps = useMemo(
+    () =>
+      steps.map((step) => ({
+        noteId: step.noteId,
+        label: formatNoteLabel(step.noteId, locale),
+        hz: getNoteHz(step.noteId),
+        toneNote: step.noteId,
+      })),
+    [locale, steps],
+  )
+
+  const noteIds = useMemo(
+    () => resolvedSteps.map((step) => step.noteId),
+    [resolvedSteps],
+  )
+
+  const step = resolvedSteps[stepIndex]
   const { status, reading, start, stop, reset } = usePitchDetector(step.hz)
 
   useEffect(() => () => stop(), [stop])
@@ -45,7 +63,7 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
         holdStartRef.current = null
         setHoldProgress(0)
         stop()
-        if (stepIndex + 1 >= steps.length) {
+        if (stepIndex + 1 >= resolvedSteps.length) {
           setFinished(true)
           setPhase('done')
         } else {
@@ -63,7 +81,7 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
     finished,
     step.hz,
     stepIndex,
-    steps.length,
+    resolvedSteps.length,
     stop,
     toleranceCents,
     holdMs,
@@ -83,7 +101,11 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
     <div className="space-y-6">
       <p className={questHintClass}>{q.hint}</p>
 
-      <StepBadges labels={steps.map((s) => s.label)} currentIndex={stepIndex} />
+      {showStaff && (
+        <NoteStaff noteIds={noteIds} highlightIndex={stepIndex} captionNoteId={step.noteId} />
+      )}
+
+      <StepBadges labels={resolvedSteps.map((s) => s.label)} currentIndex={stepIndex} />
 
       {!finished && phase === 'listen' && (
         <BrutalButton variant="primary" fullWidth leadingIcon="play" onClick={() => void playMentorNote()}>

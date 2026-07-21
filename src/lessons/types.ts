@@ -15,6 +15,7 @@ export type QuestType =
   | 'checklist'
   | 'slow-fast'
   | 'note-echo'
+  | 'staff-intro'
   | 'complex-flow'
   | 'streak-gate'
   | 'crescendo'

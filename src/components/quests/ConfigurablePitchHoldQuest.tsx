@@ -3,7 +3,9 @@ import { isInTune } from '../../audio/pitch'
 import { playReferenceTone } from '../../audio/referenceTone'
 import { usePitchDetector } from '../../audio/usePitchDetector'
 import type { PitchHoldConfig } from '../../lessons/quest-config'
+import { formatNoteLabel, getNoteHz } from '../../music/notes'
 import { useI18n } from '../../i18n'
+import { NoteStaff } from '../notes/NoteStaff'
 import { PitchTuner } from '../PitchTuner'
 import { BrutalButton } from '../ui'
 import { HoldProgress, questHintClass } from './quest-ui'
@@ -14,11 +16,13 @@ interface ConfigurablePitchHoldQuestProps {
 }
 
 export function ConfigurablePitchHoldQuest({ config, onComplete }: ConfigurablePitchHoldQuestProps) {
-  const { t } = useI18n()
+  const { locale, t } = useI18n()
   const q = t.quests.pitchHold
   const shared = t.quests.shared
 
-  const { label, hz, toleranceCents, holdMs } = config
+  const { noteId, toleranceCents, holdMs, showStaff } = config
+  const label = formatNoteLabel(noteId, locale)
+  const hz = getNoteHz(noteId)
   const { status, reading, start, stop, reset } = usePitchDetector(hz)
   const [holdProgress, setHoldProgress] = useState(0)
   const [finished, setFinished] = useState(false)
@@ -51,6 +55,8 @@ export function ConfigurablePitchHoldQuest({ config, onComplete }: ConfigurableP
   return (
     <div className="space-y-6">
       <p className={questHintClass}>{q.hint(label, toleranceCents, holdSeconds)}</p>
+
+      {showStaff && <NoteStaff noteIds={[noteId]} highlightIndex={0} captionNoteId={noteId} />}
 
       <BrutalButton variant="secondary" fullWidth size="sm" leadingIcon="play" onClick={() => void playReferenceTone(hz)}>
         {q.referenceButton}

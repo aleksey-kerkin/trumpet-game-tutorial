@@ -17,6 +17,7 @@ import { MouthpieceQuest } from '../../components/quests/MouthpieceQuest'
 import { NoteEchoQuest } from '../../components/quests/NoteEchoQuest'
 import { ReviewWeakQuest } from '../../components/quests/ReviewWeakQuest'
 import { SlowFastQuest } from '../../components/quests/SlowFastQuest'
+import { StaffIntroQuest } from '../../components/quests/StaffIntroQuest'
 import { StreakGateQuest } from '../../components/quests/StreakGateQuest'
 import { TwoNotesQuest } from '../../components/quests/TwoNotesQuest'
 import { useI18n } from '../../i18n'
@@ -80,6 +81,11 @@ function renderQuestBody(quest: QuestDefinition, onComplete: () => void, t: Retu
     case 'note-echo':
       if (quest.config?.kind === 'note-echo') {
         return <NoteEchoQuest config={quest.config.data} onComplete={onComplete} />
+      }
+      break
+    case 'staff-intro':
+      if (quest.config?.kind === 'staff-intro') {
+        return <StaffIntroQuest config={quest.config.data} onComplete={onComplete} />
       }
       break
     case 'complex-flow':

@@ -14,7 +14,11 @@ const LEGACY_QUEST_IDS: Record<string, string> = {
 
 export function migrateCompletedQuestIds(ids: string[]): string[] {
   const migrated = ids.map((id) => LEGACY_QUEST_IDS[id] ?? id)
-  return [...new Set(migrated)]
+  const unique = [...new Set(migrated)]
+  if (unique.includes('hold-c4') && !unique.includes('staff-basics')) {
+    unique.push('staff-basics')
+  }
+  return unique
 }
 
 export function getQuestCatalog(locale: Locale): QuestDefinition[] {

@@ -156,6 +156,16 @@ export const quests = {
     listenAgainButton: 'Listen again',
     completeButton: 'Ear training in action!',
   },
+  staffIntro: {
+    learnHint: 'The treble clef marks the staff for trumpet. Notes sit on lines or in spaces.',
+    learnBody:
+      'Middle C (C4) is a common first note on trumpet — often written on the ledger line below the staff.',
+    toQuizButton: 'Quick check',
+    quizHint: 'Which note is highlighted on the staff?',
+    quizWrong: 'Not quite — look at the line or space and try again.',
+    quizCorrect: 'Correct — you can read your first note!',
+    completeButton: 'Continue to playing',
+  },
   complexFlow: {
     warmupStepTitle: 'Step 1 — warmup',
     sequenceStepTitle: 'Step 2 — vocalise and sequence',

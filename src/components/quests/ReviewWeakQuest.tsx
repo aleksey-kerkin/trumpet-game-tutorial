@@ -19,7 +19,7 @@ export function ReviewWeakQuest({ onComplete }: ReviewWeakQuestProps) {
 
   const suggested = useMemo(() => {
     const completedEarly = catalog.filter(
-      (quest) => completedQuestIds.includes(quest.id) && quest.order <= 14,
+      (quest) => completedQuestIds.includes(quest.id) && quest.order <= 15,
     )
     return completedEarly.length > 0
       ? completedEarly.reduce((weakest, quest) =>

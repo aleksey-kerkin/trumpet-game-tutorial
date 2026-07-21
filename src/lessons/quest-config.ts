@@ -1,13 +1,14 @@
+import type { NoteId } from '../music/notes'
+
 export interface PitchStep {
-  label: string
-  hz: number
+  noteId: NoteId
 }
 
 export interface PitchHoldConfig {
-  label: string
-  hz: number
+  noteId: NoteId
   toleranceCents: number
   holdMs: number
+  showStaff?: boolean
 }
 
 export interface PitchSequenceConfig {
@@ -41,15 +42,20 @@ export interface SlowFastConfig {
 }
 
 export interface NoteEchoStep {
-  label: string
-  toneNote: string
-  hz: number
+  noteId: NoteId
 }
 
 export interface NoteEchoConfig {
   steps: NoteEchoStep[]
   toleranceCents: number
   holdMs: number
+  showStaff?: boolean
+}
+
+export interface StaffIntroConfig {
+  introNoteId: NoteId
+  quizNoteId: NoteId
+  quizOptions: NoteId[]
 }
 
 export interface ComplexFlowConfig {
@@ -68,6 +74,7 @@ export type QuestConfig =
   | { kind: 'metronome'; data: MetronomeConfig }
   | { kind: 'slow-fast'; data: SlowFastConfig }
   | { kind: 'note-echo'; data: NoteEchoConfig }
+  | { kind: 'staff-intro'; data: StaffIntroConfig }
   | { kind: 'complex-flow'; data: ComplexFlowConfig }
   | { kind: 'streak-gate'; data: StreakGateConfig }
   | { kind: 'crescendo'; data: { steps: number } }

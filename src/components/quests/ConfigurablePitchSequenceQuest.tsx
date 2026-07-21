@@ -3,6 +3,7 @@ import { isInTune } from '../../audio/pitch'
 import { playReferenceTone } from '../../audio/referenceTone'
 import { usePitchDetector } from '../../audio/usePitchDetector'
 import type { PitchSequenceConfig } from '../../lessons/quest-config'
+import { formatNoteLabel, getNoteHz } from '../../music/notes'
 import { useI18n } from '../../i18n'
 import { NoteStaff } from '../notes/NoteStaff'
 import { PitchTuner } from '../PitchTuner'
@@ -14,23 +15,11 @@ interface ConfigurablePitchSequenceQuestProps {
   onComplete: () => void
 }
 
-function stepsToVexString(steps: PitchSequenceConfig['steps']): string {
-  const parts = steps.map((step) => {
-    const match = step.label.match(/([A-G])(#|b)?/i)
-    if (!match) return 'C4/q'
-    const letter = match[1].toUpperCase()
-    const accidental = match[2] ?? ''
-    const octave = step.label.match(/\d/)?.[0] ?? '4'
-    return `${letter}${accidental}${octave}/q`
-  })
-  return parts.join(', ')
-}
-
 export function ConfigurablePitchSequenceQuest({
   config,
   onComplete,
 }: ConfigurablePitchSequenceQuestProps) {
-  const { t } = useI18n()
+  const { locale, t } = useI18n()
   const q = t.quests.pitchSequence
   const shared = t.quests.shared
 
@@ -40,9 +29,23 @@ export function ConfigurablePitchSequenceQuest({
   const [finished, setFinished] = useState(false)
   const holdStartRef = useRef<number | null>(null)
 
-  const step = steps[stepIndex]
+  const resolvedSteps = useMemo(
+    () =>
+      steps.map((step) => ({
+        noteId: step.noteId,
+        label: formatNoteLabel(step.noteId, locale),
+        hz: getNoteHz(step.noteId),
+      })),
+    [locale, steps],
+  )
+
+  const noteIds = useMemo(
+    () => resolvedSteps.map((step) => step.noteId),
+    [resolvedSteps],
+  )
+
+  const step = resolvedSteps[stepIndex]
   const { status, reading, start, stop, reset } = usePitchDetector(step.hz)
-  const staffNotes = useMemo(() => stepsToVexString(steps), [steps])
 
   const holdSeconds = Math.round(holdMs / 100) / 10
 
@@ -62,7 +65,7 @@ export function ConfigurablePitchSequenceQuest({
         holdStartRef.current = null
         setHoldProgress(0)
         stop()
-        if (stepIndex + 1 >= steps.length) {
+        if (stepIndex + 1 >= resolvedSteps.length) {
           setFinished(true)
         } else {
           setStepIndex((i) => i + 1)
@@ -72,15 +75,27 @@ export function ConfigurablePitchSequenceQuest({
       holdStartRef.current = null
       setHoldProgress(0)
     }
-  }, [reading, status, finished, step.hz, stepIndex, steps.length, stop, toleranceCents, holdMs])
+  }, [
+    reading,
+    status,
+    finished,
+    step.hz,
+    stepIndex,
+    resolvedSteps.length,
+    stop,
+    toleranceCents,
+    holdMs,
+  ])
 
   return (
     <div className="space-y-6">
       <p className={questHintClass}>{q.hint(holdSeconds)}</p>
 
-      {showStaff && <NoteStaff noteString={staffNotes} />}
+      {showStaff && (
+        <NoteStaff noteIds={noteIds} highlightIndex={stepIndex} captionNoteId={step.noteId} />
+      )}
 
-      <StepBadges labels={steps.map((s) => s.label)} currentIndex={stepIndex} />
+      <StepBadges labels={resolvedSteps.map((s) => s.label)} currentIndex={stepIndex} />
 
       {!finished && (
         <>
@@ -101,35 +116,37 @@ export function ConfigurablePitchSequenceQuest({
             cents={reading.cents}
             toleranceCents={toleranceCents}
           />
+
+          {status === 'listening' && (
+            <HoldProgress progress={holdProgress} label={shared.holdProgress} />
+          )}
+
+          {status === 'idle' && (
+            <BrutalButton variant="primary" fullWidth onClick={() => void start()}>
+              {stepIndex === 0 ? q.startMicrophoneFirst : q.startMicrophoneNext}
+            </BrutalButton>
+          )}
+
+          {status === 'listening' && (
+            <BrutalButton
+              variant="ghost"
+              fullWidth
+              onClick={() => {
+                stop()
+                holdStartRef.current = null
+                setHoldProgress(0)
+              }}
+            >
+              {shared.stop}
+            </BrutalButton>
+          )}
+
+          {status === 'error' && (
+            <BrutalButton variant="ghost" fullWidth onClick={reset}>
+              {shared.tryAgain}
+            </BrutalButton>
+          )}
         </>
-      )}
-
-      {status === 'listening' && !finished && <HoldProgress progress={holdProgress} />}
-
-      {status === 'idle' && !finished && (
-        <BrutalButton variant="primary" fullWidth onClick={() => void start()}>
-          {stepIndex === 0 ? q.startMicrophoneFirst : q.startMicrophoneNext}
-        </BrutalButton>
-      )}
-
-      {status === 'listening' && !finished && (
-        <BrutalButton
-          variant="ghost"
-          fullWidth
-          onClick={() => {
-            stop()
-            holdStartRef.current = null
-            setHoldProgress(0)
-          }}
-        >
-          {shared.stop}
-        </BrutalButton>
-      )}
-
-      {status === 'error' && (
-        <BrutalButton variant="ghost" fullWidth onClick={reset}>
-          {shared.tryAgain}
-        </BrutalButton>
       )}
 
       {finished && (

@@ -10,7 +10,7 @@ export const about: AboutContent = {
     },
     {
       q: 'Where do the exercises come from?',
-      a: 'Exercises and text are original. The course structure is inspired by V.M. Dokshitser’s method, but notes and textbook materials are not included in the app.',
+      a: 'Exercises and text are original. Melodies and drills on the staff are written for this app (rendered with VexFlow) — not copied from textbooks. The course structure is inspired by V.M. Dokshitser’s method.',
     },
     {
       q: 'Where is progress saved?',
