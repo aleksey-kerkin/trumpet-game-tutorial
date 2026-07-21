@@ -1,9 +1,9 @@
 import { PitchDetector } from 'pitchy'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { centsOffTarget, medianFrequency } from './pitch'
+import { centsOffTarget, foldToNearestOctave, medianFrequency } from './pitch'
 
 const FFT_SIZE = 2048
-const CLARITY_MIN = 0.82
+const CLARITY_MIN = 0.75
 const SMOOTHING_WINDOW = 5
 
 export type PitchDetectorStatus = 'idle' | 'listening' | 'error'
@@ -41,6 +41,7 @@ export function usePitchDetector(targetHz: number) {
     audioContextRef.current = null
     historyRef.current = []
     setReading({ frequency: 0, clarity: 0, cents: Number.POSITIVE_INFINITY })
+    setStatus('idle')
   }, [])
 
   useEffect(() => () => stop(), [stop])
@@ -60,22 +61,23 @@ export function usePitchDetector(targetHz: number) {
       source.connect(analyser)
 
       const detector = detectorRef.current
-      detector.clarityThreshold = 0.85
-      detector.minVolumeDecibels = -45
+      detector.clarityThreshold = 0.75
+      detector.minVolumeDecibels = -50
 
       const tick = () => {
         analyser.getFloatTimeDomainData(bufferRef.current)
         const [pitch, clarity] = detector.findPitch(bufferRef.current, audioContext.sampleRate)
+        const target = targetRef.current
 
         if (pitch > 0 && clarity >= CLARITY_MIN) {
-          historyRef.current.push(pitch)
+          historyRef.current.push(foldToNearestOctave(pitch, target))
           if (historyRef.current.length > SMOOTHING_WINDOW) {
             historyRef.current.shift()
           }
         }
 
         const frequency = medianFrequency(historyRef.current)
-        const cents = centsOffTarget(frequency, targetRef.current)
+        const cents = centsOffTarget(frequency, target)
         setReading({ frequency, clarity, cents })
         rafRef.current = requestAnimationFrame(tick)
       }
@@ -89,7 +91,6 @@ export function usePitchDetector(targetHz: number) {
 
   const reset = useCallback(() => {
     stop()
-    setStatus('idle')
   }, [stop])
 
   return { status, reading, start, stop, reset }

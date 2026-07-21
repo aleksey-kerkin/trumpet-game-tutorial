@@ -3,7 +3,7 @@ import { isInTune } from '../../audio/pitch'
 import { playReferenceTone } from '../../audio/referenceTone'
 import { usePitchDetector } from '../../audio/usePitchDetector'
 import type { PitchSequenceConfig } from '../../lessons/quest-config'
-import { formatNoteLabel, getNoteHz } from '../../music/notes'
+import { formatNoteLabel, getConcertHz } from '../../music/notes'
 import { useI18n } from '../../i18n'
 import { NoteStaff } from '../notes/NoteStaff'
 import { PitchTuner } from '../PitchTuner'
@@ -34,7 +34,7 @@ export function ConfigurablePitchSequenceQuest({
       steps.map((step) => ({
         noteId: step.noteId,
         label: formatNoteLabel(step.noteId, locale),
-        hz: getNoteHz(step.noteId),
+        hz: getConcertHz(step.noteId),
       })),
     [locale, steps],
   )

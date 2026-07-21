@@ -3,7 +3,7 @@ import * as Tone from 'tone'
 import { isInTune } from '../../audio/pitch'
 import { usePitchDetector } from '../../audio/usePitchDetector'
 import type { NoteEchoConfig } from '../../lessons/quest-config'
-import { formatNoteLabel, getNoteHz } from '../../music/notes'
+import { formatNoteLabel, getConcertHz } from '../../music/notes'
 import { useI18n } from '../../i18n'
 import { NoteStaff } from '../notes/NoteStaff'
 import { PitchTuner } from '../PitchTuner'
@@ -33,8 +33,7 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
       steps.map((step) => ({
         noteId: step.noteId,
         label: formatNoteLabel(step.noteId, locale),
-        hz: getNoteHz(step.noteId),
-        toneNote: step.noteId,
+        hz: getConcertHz(step.noteId),
       })),
     [locale, steps],
   )
@@ -93,7 +92,7 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
     if (!synthRef.current) {
       synthRef.current = new Tone.Synth().toDestination()
     }
-    synthRef.current.triggerAttackRelease(step.toneNote, '0.7')
+    synthRef.current.triggerAttackRelease(step.hz, '0.7')
     setPhase('play')
   }
 

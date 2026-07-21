@@ -11,8 +11,17 @@ const TRUMPET_NOTES = {
 
 export type NoteId = keyof typeof TRUMPET_NOTES
 
+/** Bb trumpet: written pitch sounds 2 semitones lower in concert pitch. */
+const TRUMPET_TRANSPOSITION_SEMITONES = -2
+const CONCERT_RATIO = 2 ** (TRUMPET_TRANSPOSITION_SEMITONES / 12)
+
 export function getNoteHz(noteId: NoteId): number {
   return TRUMPET_NOTES[noteId].hz
+}
+
+/** Concert frequency heard when playing a written trumpet note. */
+export function getConcertHz(noteId: NoteId): number {
+  return getNoteHz(noteId) * CONCERT_RATIO
 }
 
 export function formatNoteLabel(noteId: NoteId, locale: Locale): string {

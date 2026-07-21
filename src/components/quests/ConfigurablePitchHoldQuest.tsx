@@ -3,7 +3,7 @@ import { isInTune } from '../../audio/pitch'
 import { playReferenceTone } from '../../audio/referenceTone'
 import { usePitchDetector } from '../../audio/usePitchDetector'
 import type { PitchHoldConfig } from '../../lessons/quest-config'
-import { formatNoteLabel, getNoteHz } from '../../music/notes'
+import { formatNoteLabel, getConcertHz } from '../../music/notes'
 import { useI18n } from '../../i18n'
 import { NoteStaff } from '../notes/NoteStaff'
 import { PitchTuner } from '../PitchTuner'
@@ -22,7 +22,7 @@ export function ConfigurablePitchHoldQuest({ config, onComplete }: ConfigurableP
 
   const { noteId, toleranceCents, holdMs, showStaff } = config
   const label = formatNoteLabel(noteId, locale)
-  const hz = getNoteHz(noteId)
+  const hz = getConcertHz(noteId)
   const { status, reading, start, stop, reset } = usePitchDetector(hz)
   const [holdProgress, setHoldProgress] = useState(0)
   const [finished, setFinished] = useState(false)

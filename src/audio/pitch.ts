@@ -1,15 +1,15 @@
-export {
-  NOTE_G3_HZ,
-  NOTE_C4_HZ,
-  NOTE_D4_HZ,
-  NOTE_E4_HZ,
-  NOTE_F4_HZ,
-  NOTE_G4_HZ,
-} from './notes'
+export { NOTE_C4_HZ } from './notes'
 
 export function centsOffTarget(frequency: number, targetHz: number): number {
   if (frequency <= 0 || targetHz <= 0) return Number.POSITIVE_INFINITY
   return 1200 * Math.log2(frequency / targetHz)
+}
+
+/** Map a detected pitch to the octave nearest the target (harmonic / octave errors). */
+export function foldToNearestOctave(frequency: number, targetHz: number): number {
+  if (frequency <= 0 || targetHz <= 0) return frequency
+  const octaves = Math.round(Math.log2(frequency / targetHz))
+  return frequency / 2 ** octaves
 }
 
 export function medianFrequency(readings: number[]): number {
