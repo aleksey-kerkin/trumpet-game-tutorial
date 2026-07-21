@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import type { Locale } from './types'
 
 const STORAGE_KEY = 'trumpet-locale'
+const DEFAULT_LOCALE: Locale = 'en'
 
 interface LocaleState {
   locale: Locale
@@ -10,24 +11,17 @@ interface LocaleState {
   setLocale: (locale: Locale) => void
 }
 
-function detectDefaultLocale(): Locale {
-  if (typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('en')) {
-    return 'en'
-  }
-  return 'ru'
-}
-
 function applyDocumentLang(locale: Locale) {
   document.documentElement.lang = locale
 }
 
 export const useLocaleStore = create<LocaleState>((set) => ({
-  locale: 'ru',
+  locale: DEFAULT_LOCALE,
   hydrated: false,
 
   hydrate: () => {
     const stored = localStorage.getItem(STORAGE_KEY) as Locale | null
-    const locale = stored === 'en' || stored === 'ru' ? stored : detectDefaultLocale()
+    const locale = stored === 'en' || stored === 'ru' ? stored : DEFAULT_LOCALE
     applyDocumentLang(locale)
     set({ locale, hydrated: true })
   },
@@ -38,3 +32,7 @@ export const useLocaleStore = create<LocaleState>((set) => ({
     set({ locale })
   },
 }))
+
+if (typeof document !== 'undefined') {
+  applyDocumentLang(DEFAULT_LOCALE)
+}

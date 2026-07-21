@@ -20,11 +20,12 @@ export default defineConfig(({ mode }) => ({
       manifest: {
         name: 'Trumpeter on Horseback',
         short_name: 'Trumpeter',
-        description: 'Игровой тренажёр для обучения игре на трубе',
+        description:
+          'A game-style trumpet trainer — short daily quests from your first buzz to your first melody.',
         theme_color: '#0d1117',
         background_color: '#0d1117',
         display: 'standalone',
-        lang: 'ru',
+        lang: 'en',
         icons: [
           {
             src: '/favicon.svg',
