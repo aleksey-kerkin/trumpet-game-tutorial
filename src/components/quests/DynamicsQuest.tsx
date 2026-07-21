@@ -3,12 +3,13 @@ import { useMicrophoneLevel } from '../../audio/useMicrophoneLevel'
 import { BrutalIcon } from '../icons'
 import { useI18n } from '../../i18n'
 import { BrutalBadge, BrutalButton, BrutalPanel, BrutalProgress } from '../ui'
-import { questHintClass } from './quest-ui'
+import { HoldProgress, questHintClass } from './quest-ui'
 
-const NOISE_FLOOR = 0.012
-const QUIET_MAX = 0.038
-const LOUD_MIN = 0.065
-const HOLD_MS = 1200
+const NOISE_FLOOR = 0.008
+const LOUD_RATIO = 1.35
+const LOUD_ABSOLUTE_MIN = 0.018
+const HOLD_MS = 1000
+const RMS_SMOOTHING = 0.2
 
 type Phase = 'idle' | 'quiet' | 'loud' | 'done' | 'error'
 
@@ -23,51 +24,91 @@ export function DynamicsQuest({ onComplete }: DynamicsQuestProps) {
 
   const { status, level, start, stop, reset } = useMicrophoneLevel()
   const [phase, setPhase] = useState<Phase>('idle')
+  const [loudTarget, setLoudTarget] = useState(LOUD_ABSOLUTE_MIN)
+  const [holdProgress, setHoldProgress] = useState(0)
+
+  const phaseRef = useRef<Phase>('idle')
   const holdStartRef = useRef<number | null>(null)
+  const quietBaselineRef = useRef(0)
+  const loudTargetRef = useRef(LOUD_ABSOLUTE_MIN)
+  const smoothedRmsRef = useRef(0)
 
   useEffect(() => () => stop(), [stop])
 
+  const setPhaseSafe = (next: Phase) => {
+    phaseRef.current = next
+    setPhase(next)
+  }
+
   const handleLevel = useCallback(
     (rms: number) => {
-      if (phase !== 'quiet' && phase !== 'loud') return
+      const currentPhase = phaseRef.current
+      if (currentPhase !== 'quiet' && currentPhase !== 'loud') return
 
+      smoothedRmsRef.current =
+        smoothedRmsRef.current * (1 - RMS_SMOOTHING) + rms * RMS_SMOOTHING
+      const levelSample = smoothedRmsRef.current
       const now = performance.now()
 
-      if (phase === 'quiet') {
-        const inRange = rms >= NOISE_FLOOR && rms <= QUIET_MAX
-        if (inRange) {
+      if (currentPhase === 'quiet') {
+        if (levelSample >= NOISE_FLOOR) {
           if (!holdStartRef.current) holdStartRef.current = now
-          if (now - holdStartRef.current >= HOLD_MS) {
+          const elapsed = now - holdStartRef.current
+          setHoldProgress(Math.min(1, elapsed / HOLD_MS))
+          quietBaselineRef.current = Math.max(quietBaselineRef.current, levelSample)
+
+          if (elapsed >= HOLD_MS) {
             holdStartRef.current = null
-            setPhase('loud')
+            setHoldProgress(0)
+            const target = Math.max(
+              quietBaselineRef.current * LOUD_RATIO,
+              LOUD_ABSOLUTE_MIN,
+            )
+            loudTargetRef.current = target
+            setLoudTarget(target)
+            setPhaseSafe('loud')
           }
         } else {
           holdStartRef.current = null
+          quietBaselineRef.current = 0
+          setHoldProgress(0)
         }
         return
       }
 
-      if (rms >= LOUD_MIN) {
+      if (levelSample >= loudTargetRef.current) {
         if (!holdStartRef.current) holdStartRef.current = now
-        if (now - holdStartRef.current >= HOLD_MS) {
+        const elapsed = now - holdStartRef.current
+        setHoldProgress(Math.min(1, elapsed / HOLD_MS))
+        if (elapsed >= HOLD_MS) {
           holdStartRef.current = null
+          setHoldProgress(0)
           stop()
-          setPhase('done')
+          setPhaseSafe('done')
         }
       } else {
         holdStartRef.current = null
+        setHoldProgress(0)
       }
     },
-    [phase, stop],
+    [stop],
   )
 
   const begin = async () => {
     holdStartRef.current = null
-    setPhase('quiet')
+    quietBaselineRef.current = 0
+    loudTargetRef.current = LOUD_ABSOLUTE_MIN
+    smoothedRmsRef.current = 0
+    setHoldProgress(0)
+    setLoudTarget(LOUD_ABSOLUTE_MIN)
+    setPhaseSafe('quiet')
     await start(handleLevel)
   }
 
-  const meterPercent = Math.min(100, (level / LOUD_MIN) * 70)
+  const meterPercent =
+    phase === 'loud'
+      ? Math.min(100, (level / loudTarget) * 100)
+      : Math.min(100, (level / NOISE_FLOOR) * 35)
 
   const hint =
     phase === 'idle'
@@ -102,6 +143,10 @@ export function DynamicsQuest({ onComplete }: DynamicsQuestProps) {
         </div>
       </BrutalPanel>
 
+      {(phase === 'quiet' || phase === 'loud') && (
+        <HoldProgress progress={holdProgress} />
+      )}
+
       {phase === 'idle' && (
         <BrutalButton variant="primary" fullWidth onClick={() => void begin()}>
           {shared.startMicrophone}
@@ -114,7 +159,8 @@ export function DynamicsQuest({ onComplete }: DynamicsQuestProps) {
           fullWidth
           onClick={() => {
             stop()
-            setPhase('idle')
+            setPhaseSafe('idle')
+            setHoldProgress(0)
           }}
         >
           {shared.stop}
@@ -127,7 +173,8 @@ export function DynamicsQuest({ onComplete }: DynamicsQuestProps) {
           fullWidth
           onClick={() => {
             reset()
-            setPhase('idle')
+            setPhaseSafe('idle')
+            setHoldProgress(0)
           }}
         >
           {shared.tryAgain}
