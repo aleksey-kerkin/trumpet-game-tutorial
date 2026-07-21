@@ -1,6 +1,6 @@
 import type { Locale } from '../i18n/types'
 
-export const TRUMPET_NOTES = {
+const TRUMPET_NOTES = {
   G3: { hz: 196.0, vex: 'G3/q', en: 'G', ru: 'соль' },
   C4: { hz: 261.63, vex: 'C4/q', en: 'C', ru: 'до' },
   D4: { hz: 293.66, vex: 'D4/q', en: 'D', ru: 'ре' },
@@ -10,13 +10,6 @@ export const TRUMPET_NOTES = {
 } as const
 
 export type NoteId = keyof typeof TRUMPET_NOTES
-
-export const NOTE_G3_HZ = TRUMPET_NOTES.G3.hz
-export const NOTE_C4_HZ = TRUMPET_NOTES.C4.hz
-export const NOTE_D4_HZ = TRUMPET_NOTES.D4.hz
-export const NOTE_E4_HZ = TRUMPET_NOTES.E4.hz
-export const NOTE_F4_HZ = TRUMPET_NOTES.F4.hz
-export const NOTE_G4_HZ = TRUMPET_NOTES.G4.hz
 
 export function getNoteHz(noteId: NoteId): number {
   return TRUMPET_NOTES[noteId].hz
@@ -28,13 +21,22 @@ export function formatNoteLabel(noteId: NoteId, locale: Locale): string {
   return `${name} (${noteId})`
 }
 
-export function formatNoteCaption(noteId: NoteId, locale: Locale): string {
-  return formatNoteLabel(noteId, locale)
-}
-
 export function noteIdsToVexString(noteIds: readonly NoteId[]): string {
   return noteIds.map((id, index) => {
     const vex = TRUMPET_NOTES[id].vex
     return index === 0 ? vex : vex.replace('/q', '')
   }).join(', ')
+}
+
+export function noteIdsToVoiceTime(noteIds: readonly NoteId[]): string {
+  return `${Math.max(1, noteIds.length)}/4`
+}
+
+const STAFF_MAX_WIDTH = 640
+
+export function staffRenderWidth(noteCount: number, containerWidth: number): number {
+  const max = Math.min(Math.max(containerWidth, 1), STAFF_MAX_WIDTH)
+  const compact = 120 + noteCount * 72
+  if (noteCount <= 3) return Math.min(max, Math.max(260, compact))
+  return Math.min(max, Math.max(320, 200 + noteCount * 56))
 }

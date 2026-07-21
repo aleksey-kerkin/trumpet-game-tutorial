@@ -34,7 +34,7 @@ export function StaffIntroQuest({ config, onComplete }: StaffIntroQuestProps) {
         <>
           <p className={questHintClass}>{q.learnHint}</p>
           <NoteStaff noteIds={[introNoteId]} highlightIndex={0} captionNoteId={introNoteId} />
-          <p className="text-body leading-relaxed text-main-foreground/90">{q.learnBody}</p>
+          <p className="text-body leading-relaxed text-foreground">{q.learnBody}</p>
           <BrutalButton variant="primary" fullWidth onClick={() => setPhase('quiz')}>
             {q.toQuizButton}
           </BrutalButton>

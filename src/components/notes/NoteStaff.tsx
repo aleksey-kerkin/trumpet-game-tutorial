@@ -1,9 +1,13 @@
-import { useEffect, useId, useRef } from 'react'
-import { Factory } from 'vexflow'
+import { useEffect, useId, useRef, useState } from 'react'
 import type { NoteId } from '../../music/notes'
-import { formatNoteCaption, noteIdsToVexString } from '../../music/notes'
+import {
+  noteIdsToVexString,
+  noteIdsToVoiceTime,
+  staffRenderWidth,
+} from '../../music/notes'
 import { useI18n } from '../../i18n'
-import { BrutalCard } from '../ui'
+import { BrutalCard, cn } from '../ui'
+import { renderVexStaff } from './renderVexStaff'
 
 interface NoteStaffProps {
   noteIds: readonly NoteId[]
@@ -12,65 +16,120 @@ interface NoteStaffProps {
   captionNoteId?: NoteId
 }
 
-const HIGHLIGHT_STYLE = {
-  fillStyle: '#c9a227',
-  strokeStyle: '#0a0a0a',
-} as const
+const RESIZE_DEBOUNCE_MS = 100
+
+function buildRenderKey(
+  renderWidth: number,
+  locale: string,
+  captionId: NoteId | undefined,
+  noteString: string,
+  highlightIndex: number | undefined,
+): string {
+  return [renderWidth, locale, captionId, noteString, highlightIndex ?? ''].join(':')
+}
 
 export function NoteStaff({
   noteIds,
   highlightIndex,
-  width = 320,
+  width,
   captionNoteId,
 }: NoteStaffProps) {
   const { locale, t } = useI18n()
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const elementId = useId().replace(/:/g, '')
   const noteString = noteIdsToVexString(noteIds)
+  const voiceTime = noteIdsToVoiceTime(noteIds)
   const captionId = captionNoteId ?? noteIds[highlightIndex ?? 0]
+  const captionNoteIndex = highlightIndex ?? 0
+  const [scrollable, setScrollable] = useState(false)
+  const lastRenderKeyRef = useRef('')
 
   useEffect(() => {
+    const wrapper = wrapperRef.current
     const container = containerRef.current
-    if (!container || noteIds.length === 0) return
+    if (!wrapper || !container || noteIds.length === 0) return
 
-    container.innerHTML = ''
-    const mount = document.createElement('div')
-    mount.id = elementId
-    container.appendChild(mount)
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null
+    let cancelled = false
 
-    try {
-      const vf = new Factory({
-        renderer: { elementId, width, height: 110 },
-      })
-      const score = vf.EasyScore()
-      const system = vf.System()
-      const notes = score.notes(noteString, { stem: 'up' })
-      if (highlightIndex !== undefined && notes[highlightIndex]) {
-        notes[highlightIndex].setStyle(HIGHLIGHT_STYLE)
+    const renderStaff = () => {
+      if (cancelled) return
+
+      const containerWidth = width ?? wrapper.clientWidth
+      const renderWidth = staffRenderWidth(noteIds.length, containerWidth)
+      const renderKey = buildRenderKey(
+        renderWidth,
+        locale,
+        captionId,
+        noteString,
+        highlightIndex,
+      )
+
+      if (renderKey === lastRenderKeyRef.current && container.childElementCount > 0) {
+        return
       }
-      system
-        .addStave({
-          voices: [score.voice(notes)],
+      lastRenderKeyRef.current = renderKey
+
+      container.innerHTML = ''
+      setScrollable(renderWidth > containerWidth || noteIds.length >= 4)
+
+      try {
+        renderVexStaff({
+          elementId,
+          noteString,
+          voiceTime,
+          renderWidth,
+          highlightIndex,
+          captionId,
+          captionNoteIndex,
+          locale,
         })
-        .addClef('treble')
-      vf.draw()
-    } catch {
-      container.textContent = noteString
+      } catch (error) {
+        console.error('NoteStaff render failed:', error)
+        container.innerHTML = ''
+      }
     }
+
+    renderStaff()
+
+    const observer = new ResizeObserver(() => {
+      if (debounceTimer) clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(renderStaff, RESIZE_DEBOUNCE_MS)
+    })
+    observer.observe(wrapper)
 
     return () => {
+      cancelled = true
+      observer.disconnect()
+      if (debounceTimer) clearTimeout(debounceTimer)
       container.innerHTML = ''
+      lastRenderKeyRef.current = ''
     }
-  }, [elementId, highlightIndex, noteIds.length, noteString, width])
+  }, [
+    captionId,
+    captionNoteIndex,
+    elementId,
+    highlightIndex,
+    locale,
+    noteIds.length,
+    noteString,
+    voiceTime,
+    width,
+  ])
 
   return (
-    <BrutalCard className="overflow-x-auto !p-2" aria-label={t.strings.noteStaffAriaLabel}>
-      <div ref={containerRef} />
-      {captionId && (
-        <p className="mt-2 text-center text-meta font-semibold text-main-foreground">
-          {formatNoteCaption(captionId, locale)}
-        </p>
-      )}
+    <BrutalCard className="p-2!" aria-label={t.strings.noteStaffAriaLabel}>
+      <div ref={wrapperRef} className="flex justify-center">
+        <div
+          ref={containerRef}
+          id={elementId}
+          className={cn(
+            'leading-none',
+            scrollable && 'max-w-full overflow-x-auto',
+          )}
+        />
+      </div>
     </BrutalCard>
   )
 }
