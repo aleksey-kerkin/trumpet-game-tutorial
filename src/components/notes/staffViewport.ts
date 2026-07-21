@@ -46,7 +46,7 @@ function applyClefPadding(svg: SVGSVGElement, contentBBox: BBox): BBox {
   }
 }
 
-export function measureStaffContentBBox(svg: SVGSVGElement): BBox {
+function measureStaffContentBBox(svg: SVGSVGElement): BBox {
   let contentBBox: BBox | null = null
 
   for (const stave of svg.querySelectorAll('.vf-stave')) {

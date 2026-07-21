@@ -148,7 +148,7 @@ export function DynamicsQuest({ onComplete }: DynamicsQuestProps) {
       )}
 
       {phase === 'idle' && (
-        <BrutalButton variant="primary" fullWidth onClick={() => void begin()}>
+        <BrutalButton variant="primary" fullWidth aria-pressed={false} onClick={() => void begin()}>
           {shared.startMicrophone}
         </BrutalButton>
       )}
@@ -157,6 +157,7 @@ export function DynamicsQuest({ onComplete }: DynamicsQuestProps) {
         <BrutalButton
           variant="ghost"
           fullWidth
+          aria-pressed={true}
           onClick={() => {
             stop()
             setPhaseSafe('idle')

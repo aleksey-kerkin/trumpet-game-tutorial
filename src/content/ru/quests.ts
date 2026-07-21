@@ -195,5 +195,7 @@ export const quests = {
       target: 'цель',
       above: 'выше',
     },
+    scaleAriaLabel: (label: string, targetHz: number) =>
+      `Тюнер для ${label}, цель ${Math.round(targetHz)} герц`,
   },
 } as const

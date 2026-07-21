@@ -87,7 +87,7 @@ export function CrescendoQuest({ steps, onComplete }: CrescendoQuestProps) {
       </BrutalPanel>
 
       {!started && (
-        <BrutalButton variant="primary" fullWidth onClick={() => void begin()}>
+        <BrutalButton variant="primary" fullWidth aria-pressed={false} onClick={() => void begin()}>
           {shared.startMicrophone}
         </BrutalButton>
       )}
@@ -96,6 +96,7 @@ export function CrescendoQuest({ steps, onComplete }: CrescendoQuestProps) {
         <BrutalButton
           variant="ghost"
           fullWidth
+          aria-pressed={true}
           onClick={() => {
             stop()
             setStarted(false)

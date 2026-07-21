@@ -193,7 +193,7 @@ export function DailyMiniQuest({ onComplete }: DailyMiniQuestProps) {
         />
         {status === 'listening' && <HoldProgress progress={holdProgress} />}
         {status === 'idle' && (
-          <BrutalButton variant="primary" fullWidth onClick={() => void start()}>
+          <BrutalButton variant="primary" fullWidth aria-pressed={false} onClick={() => void start()}>
             {shared.startMicrophone}
           </BrutalButton>
         )}

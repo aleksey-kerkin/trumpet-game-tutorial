@@ -1,9 +1,3 @@
-import {
-  Annotation,
-  AnnotationHorizontalJustify,
-  AnnotationVerticalJustify,
-  Factory,
-} from 'vexflow'
 import type { Locale } from '../../i18n/types'
 import type { NoteId } from '../../music/notes'
 import { formatNoteLabel } from '../../music/notes'
@@ -33,7 +27,7 @@ export interface RenderVexStaffParams {
   locale: Locale
 }
 
-export function renderVexStaff({
+export async function renderVexStaff({
   elementId,
   noteString,
   voiceTime,
@@ -42,7 +36,14 @@ export function renderVexStaff({
   captionId,
   captionNoteIndex,
   locale,
-}: RenderVexStaffParams): SVGSVGElement | null {
+}: RenderVexStaffParams): Promise<SVGSVGElement | null> {
+  const {
+    Annotation,
+    AnnotationHorizontalJustify,
+    AnnotationVerticalJustify,
+    Factory,
+  } = await import('vexflow')
+
   const vf = new Factory({
     renderer: { elementId, width: renderWidth, height: RENDER_HEIGHT_ESTIMATE },
   })

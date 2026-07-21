@@ -73,7 +73,7 @@ export function ConfigurablePitchHoldQuest({ config, onComplete }: ConfigurableP
       {status === 'listening' && !finished && <HoldProgress progress={holdProgress} />}
 
       {status === 'idle' && !finished && (
-        <BrutalButton variant="primary" fullWidth onClick={() => void start()}>
+        <BrutalButton variant="primary" fullWidth aria-pressed={false} onClick={() => void start()}>
           {shared.startMicrophone}
         </BrutalButton>
       )}
@@ -82,6 +82,7 @@ export function ConfigurablePitchHoldQuest({ config, onComplete }: ConfigurableP
         <BrutalButton
           variant="ghost"
           fullWidth
+          aria-pressed={true}
           onClick={() => {
             stop()
             holdStartRef.current = null

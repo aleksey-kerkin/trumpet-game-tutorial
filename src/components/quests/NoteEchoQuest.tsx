@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import * as Tone from 'tone'
 import { isInTune } from '../../audio/pitch'
 import { usePitchDetector } from '../../audio/usePitchDetector'
 import type { NoteEchoConfig } from '../../lessons/quest-config'
@@ -26,7 +25,9 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
   const [holdProgress, setHoldProgress] = useState(0)
   const [finished, setFinished] = useState(false)
   const holdStartRef = useRef<number | null>(null)
-  const synthRef = useRef<Tone.Synth | null>(null)
+  const synthRef = useRef<{ triggerAttackRelease: (hz: number, duration: string) => void } | null>(
+    null,
+  )
 
   const resolvedSteps = useMemo(
     () =>
@@ -88,6 +89,7 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
   ])
 
   const playMentorNote = async () => {
+    const Tone = await import('tone')
     await Tone.start()
     if (!synthRef.current) {
       synthRef.current = new Tone.Synth().toDestination()
@@ -127,7 +129,7 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
           )}
 
           {status === 'idle' && (
-            <BrutalButton variant="primary" fullWidth onClick={() => void start()}>
+            <BrutalButton variant="primary" fullWidth aria-pressed={false} onClick={() => void start()}>
               {q.startMicrophoneButton}
             </BrutalButton>
           )}
@@ -136,6 +138,7 @@ export function NoteEchoQuest({ config, onComplete }: NoteEchoQuestProps) {
             <BrutalButton
               variant="ghost"
               fullWidth
+              aria-pressed={true}
               onClick={() => {
                 stop()
                 holdStartRef.current = null

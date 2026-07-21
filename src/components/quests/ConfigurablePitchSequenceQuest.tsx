@@ -122,7 +122,7 @@ export function ConfigurablePitchSequenceQuest({
           )}
 
           {status === 'idle' && (
-            <BrutalButton variant="primary" fullWidth onClick={() => void start()}>
+            <BrutalButton variant="primary" fullWidth aria-pressed={false} onClick={() => void start()}>
               {stepIndex === 0 ? q.startMicrophoneFirst : q.startMicrophoneNext}
             </BrutalButton>
           )}
@@ -131,6 +131,7 @@ export function ConfigurablePitchSequenceQuest({
             <BrutalButton
               variant="ghost"
               fullWidth
+              aria-pressed={true}
               onClick={() => {
                 stop()
                 holdStartRef.current = null

@@ -59,13 +59,13 @@ export function SoundHoldQuest({
       </BrutalPanel>
 
       {status === 'idle' && (
-        <BrutalButton variant="primary" fullWidth onClick={() => void startListening()}>
+        <BrutalButton variant="primary" fullWidth aria-pressed={false} onClick={() => void startListening()}>
           {startLabel}
         </BrutalButton>
       )}
 
       {status === 'listening' && (
-        <BrutalButton variant="ghost" fullWidth onClick={stopListening}>
+        <BrutalButton variant="ghost" fullWidth aria-pressed={true} onClick={stopListening}>
           {shared.stop}
         </BrutalButton>
       )}

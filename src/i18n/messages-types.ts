@@ -145,6 +145,7 @@ export interface QuestUiMessages {
   pitchTuner: {
     zones: { silent: string; cold: string; warm: string; hot: string }
     axis: { below: string; target: string; above: string }
+    scaleAriaLabel: (label: string, targetHz: number) => string
   }
 }
 

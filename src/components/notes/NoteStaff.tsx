@@ -74,21 +74,20 @@ export function NoteStaff({
       container.innerHTML = ''
       setScrollable(renderWidth > containerWidth || noteIds.length >= 4)
 
-      try {
-        renderVexStaff({
-          elementId,
-          noteString,
-          voiceTime,
-          renderWidth,
-          highlightIndex,
-          captionId,
-          captionNoteIndex,
-          locale,
-        })
-      } catch (error) {
+      void renderVexStaff({
+        elementId,
+        noteString,
+        voiceTime,
+        renderWidth,
+        highlightIndex,
+        captionId,
+        captionNoteIndex,
+        locale,
+      }).catch((error) => {
+        if (cancelled) return
         console.error('NoteStaff render failed:', error)
         container.innerHTML = ''
-      }
+      })
     }
 
     renderStaff()

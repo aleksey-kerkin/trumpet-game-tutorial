@@ -195,5 +195,7 @@ export const quests = {
       target: 'target',
       above: 'above',
     },
+    scaleAriaLabel: (label: string, targetHz: number) =>
+      `Pitch meter for ${label}, target ${Math.round(targetHz)} hertz`,
   },
 } as const
