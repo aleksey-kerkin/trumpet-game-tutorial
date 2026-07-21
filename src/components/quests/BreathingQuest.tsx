@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { BrutalIcon } from '../icons'
 import { useI18n } from '../../i18n'
 import { BrutalButton, BrutalCard } from '../ui'
@@ -30,35 +30,50 @@ export function BreathingQuest({ onComplete }: BreathingQuestProps) {
   const [secondsLeft, setSecondsLeft] = useState(PHASES[0].seconds)
   const [cyclesDone, setCyclesDone] = useState(0)
 
+  const phaseIndexRef = useRef(0)
+  const secondsLeftRef = useRef(PHASES[0].seconds)
+  const cyclesDoneRef = useRef(0)
+
   const current = PHASES[phaseIndex]
 
   useEffect(() => {
     if (!running) return
 
     const timer = window.setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev > 1) return prev - 1
+      if (secondsLeftRef.current > 1) {
+        secondsLeftRef.current -= 1
+        setSecondsLeft(secondsLeftRef.current)
+        return
+      }
 
-        const nextIndex = (phaseIndex + 1) % PHASES.length
-        if (nextIndex === 0) {
-          setCyclesDone((c) => {
-            const next = c + 1
-            if (next >= CYCLES_REQUIRED) {
-              setRunning(false)
-            }
-            return next
-          })
+      const nextIndex = (phaseIndexRef.current + 1) % PHASES.length
+      if (nextIndex === 0) {
+        cyclesDoneRef.current += 1
+        setCyclesDone(cyclesDoneRef.current)
+        if (cyclesDoneRef.current >= CYCLES_REQUIRED) {
+          setRunning(false)
         }
-        setPhaseIndex(nextIndex)
-        return PHASES[nextIndex].seconds
-      })
+      }
+
+      phaseIndexRef.current = nextIndex
+      secondsLeftRef.current = PHASES[nextIndex].seconds
+      setPhaseIndex(nextIndex)
+      setSecondsLeft(PHASES[nextIndex].seconds)
     }, 1000)
 
     return () => window.clearInterval(timer)
-  }, [running, phaseIndex, PHASES])
+  }, [running, PHASES])
 
   const scale =
     current.phase === 'inhale' ? 1.15 : current.phase === 'hold' ? 1.15 : 0.9
+
+  const handleStart = () => {
+    phaseIndexRef.current = 0
+    secondsLeftRef.current = PHASES[0].seconds
+    setPhaseIndex(0)
+    setSecondsLeft(PHASES[0].seconds)
+    setRunning(true)
+  }
 
   return (
     <div className="space-y-6 text-center">
@@ -85,15 +100,7 @@ export function BreathingQuest({ onComplete }: BreathingQuestProps) {
       </div>
 
       {!running && cyclesDone < CYCLES_REQUIRED && (
-        <BrutalButton
-          variant="primary"
-          fullWidth
-          onClick={() => {
-            setRunning(true)
-            setPhaseIndex(0)
-            setSecondsLeft(PHASES[0].seconds)
-          }}
-        >
+        <BrutalButton variant="primary" fullWidth onClick={handleStart}>
           {q.startButton}
         </BrutalButton>
       )}
